@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Arayüzü</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.5;
+            color: #1a1a1a;
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .api-section {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .api-section:hover {
+            border-color: #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .api-section h2 {
+            color: #0f172a;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:hover {
+            background: #1e293b;
+            transform: translateY(-1px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .input-group input {
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            min-width: 120px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .result-area {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            min-height: 80px;
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            transition: all 0.2s ease;
+        }
+        
+        .loading {
+            color: #3b82f6;
+            font-style: italic;
+            background: #eff6ff;
+            border-color: #dbeafe;
+        }
+        
+        .error {
+            color: #dc2626;
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+        
+        .success {
+            color: #059669;
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+        
+        .endpoint-info {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .endpoint-info strong {
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .endpoint-info code {
+            background: #0f172a;
+            color: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 0.5rem;
+            }
+            
+            .header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn {
+                justify-content: center;
+            }
+        }
+        
+        /* Smooth scrollbar */
+        .result-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .result-area::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        .result-area::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .result-area::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>API Test Console</h1>
+            <p>Slim Framework endpoint'lerini test edin</p>
+        </div>
+        
+        <div class="content">
+            <!-- Ürünler Bölümü -->
+            <div class="api-section">
+                <h2>📦 Ürünler API</h2>
+                <div class="endpoint-info">
+                    <strong>Endpoints:</strong><br>
+                    <code>GET /products</code> - Tüm ürünleri listele<br>
+                    <code>GET /products/{id}</code> - Belirli ürünü getir
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" onclick="fetchProducts()">Tüm Ürünleri Listele</button>
+                </div>
+                
+                <div class="input-group">
+                    <input type="number" id="productId" placeholder="Ürün ID" min="1" value="1">
+                    <button class="btn" onclick="fetchProduct()">Ürün Detayı Getir</button>
+                </div>
+                
+                <div id="productResult" class="result-area">Ürün verilerini görmek için yukarıdaki butonları kullanın...</div>
+            </div>
+            
+            <!-- Kategoriler Bölümü -->
+            <div class="api-section">
+                <h2>📁 Kategoriler API</h2>
+                <div class="endpoint-info">
+                    <strong>Endpoint:</strong><br>
+                    <code>GET /categories</code> - Tüm kategorileri listele
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" onclick="fetchCategories()">Tüm Kategorileri Listele</button>
+                </div>
+                
+                <div id="categoryResult" class="result-area">Kategori verilerini görmek için yukarıdaki butonu kullanın...</div>
+            </div>
+            
+            <!-- Kullanıcılar Bölümü (Mevcut) -->
+            <div class="api-section">
+                <h2>👥 Kullanıcılar API</h2>
+                <div class="endpoint-info">
+                    <strong>Endpoints:</strong><br>
+                    <code>GET /users</code> - Tüm kullanıcıları listele<br>
+                    <code>GET /users/{id}</code> - Belirli kullanıcıyı getir
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" onclick="fetchUsers()">Tüm Kullanıcıları Listele</button>
+                </div>
+                
+                <div class="input-group">
+                    <input type="number" id="userId" placeholder="Kullanıcı ID" min="1" value="1">
+                    <button class="btn" onclick="fetchUser()">Kullanıcı Detayı Getir</button>
+                </div>
+                
+                <div id="userResult" class="result-area">Kullanıcı verilerini görmek için yukarıdaki butonları kullanın...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API çağrısı için yardımcı fonksiyon
+        async function makeAPICall(url, resultElementId) {
+            const resultElement = document.getElementById(resultElementId);
+            
+            try {
+                resultElement.textContent = "Yükleniyor...";
+                resultElement.className = "result-area loading";
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultElement.textContent = JSON.stringify(data, null, 2);
+                    resultElement.className = "result-area success";
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${data.error?.description || "Bilinmeyen hata"}`);
+                }
+            } catch (error) {
+                resultElement.textContent = `Hata: ${error.message}`;
+                resultElement.className = "result-area error";
+            }
+        }
+        
+        // Ürün fonksiyonları
+        function fetchProducts() {
+            makeAPICall("/products", "productResult");
+        }
+        
+        function fetchProduct() {
+            const productId = document.getElementById("productId").value;
+            if (!productId) {
+                alert("Lütfen bir ürün ID'si girin!");
+                return;
+            }
+            makeAPICall(`/products/${productId}`, "productResult");
+        }
+        
+        // Kategori fonksiyonları
+        function fetchCategories() {
+            makeAPICall("/categories", "categoryResult");
+        }
+        
+        // Kullanıcı fonksiyonları
+        function fetchUsers() {
+            makeAPICall("/users", "userResult");
+        }
+        
+        function fetchUser() {
+            const userId = document.getElementById("userId").value;
+            if (!userId) {
+                alert("Lütfen bir kullanıcı ID'si girin!");
+                return;
+            }
+            makeAPICall(`/users/${userId}`, "userResult");
+        }
+        
+        // Enter tuşu desteği
+        document.getElementById("productId").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                fetchProduct();
+            }
+        });
+        
+        document.getElementById("userId").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                fetchUser();
+            }
+        });
+    </script>
+</body>
+</html>
