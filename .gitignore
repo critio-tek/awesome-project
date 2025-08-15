@@ -1,0 +1,76 @@
+# Vendor directory - Composer bağımlılıkları
+/vendor/
+
+# Composer dosyaları
+composer.lock
+
+# Cache dizinleri
+/cache/
+/var/cache/
+/var/doctrine/
+/tmp/
+*.tmp
+
+# Log dosyaları
+/logs/
+/var/log/
+*.log
+
+# Environment dosyaları - Hassas bilgiler
+.env
+.env.local
+.env.*.local
+.env.production
+
+# IDE ve editör dosyaları
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# PHP dosyaları
+*.php~
+*.swp
+*.swo
+
+# Database dosyaları
+*.sqlite
+*.sqlite3
+*.db
+
+# Session dosyaları
+/var/sessions/
+
+# Upload dizinleri
+/uploads/
+/public/uploads/
+
+# Node.js bağımlılıkları (eğer frontend build aracı kullanılıyorsa)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build dosyaları
+/build/
+/dist/
+
+# Test coverage raporları
+/coverage/
+clover.xml
+phpunit.xml
+.phpunit.result.cache
+
+# Backup dosyaları
+*.bak
+*.backup
+
+# OS dosyaları
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
