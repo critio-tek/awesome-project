@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Application\Actions\User\ListUsersAction;
+use App\Application\Actions\User\SearchUserAction;
 use App\Application\Actions\User\ViewUserAction;
 use App\Application\Actions\Product\ListProductsAction;
 use App\Application\Actions\Product\ViewProductAction;
@@ -25,6 +26,7 @@ return function (App $app) {
     // Kullanıcı endpoint'leri
     $app->group('/users', function (Group $group) {
         $group->get('', ListUsersAction::class);
+        $group->get('/search', SearchUserAction::class);
         $group->get('/{id}', ViewUserAction::class);
     });
 

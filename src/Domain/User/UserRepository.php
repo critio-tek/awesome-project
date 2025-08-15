@@ -17,4 +17,11 @@ interface UserRepository
      * @throws UserNotFoundException
      */
     public function findUserOfId(int $id): User;
+
+    /**
+     * Kullanıcı adına göre arama yapar
+     * @param string $username
+     * @return User[]
+     */
+    public function searchByUsername(string $username): array;
 }
