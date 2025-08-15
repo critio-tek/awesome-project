@@ -1,3 +1,5 @@
+src/Infrastructure/Persistence/User/InMemoryUserRepository.php
+
 <?php
 
 declare(strict_types=1);
@@ -47,5 +49,22 @@ class InMemoryUserRepository implements UserRepository
         }
 
         return $this->users[$id];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function searchByUsername(string $username): array
+    {
+        $searchTerm = strtolower($username);
+        $results = [];
+        
+        foreach ($this->users as $user) {
+            if (str_contains(strtolower($user->getUsername()), $searchTerm)) {
+                $results[] = $user;
+            }
+        }
+        
+        return $results;
     }
 }
