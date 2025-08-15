@@ -74,3 +74,8 @@ phpunit.xml
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+/vendor/
+/logs/*
+!/logs/README.md
+.idea/
