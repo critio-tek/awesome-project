@@ -291,7 +291,8 @@
                 <div class="endpoint-info">
                     <strong>Endpoints:</strong><br>
                     <code>GET /users</code> - Tüm kullanıcıları listele<br>
-                    <code>GET /users/{id}</code> - Belirli kullanıcıyı getir
+                    <code>GET /users/{id}</code> - Belirli kullanıcıyı getir<br>
+                    <code>GET /users/search?username=...</code> - Kullanıcı adına göre ara
                 </div>
                 
                 <div class="button-group">
@@ -301,6 +302,11 @@
                 <div class="input-group">
                     <input type="number" id="userId" placeholder="Kullanıcı ID" min="1" value="1">
                     <button class="btn" onclick="fetchUser()">Kullanıcı Detayı Getir</button>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="searchUsername" placeholder="Kullanıcı adında arama yapın" value="">
+                    <button class="btn" onclick="searchUsers()">🔍 Kullanıcı Ara</button>
                 </div>
                 
                 <div id="userResult" class="result-area">Kullanıcı verilerini görmek için yukarıdaki butonları kullanın...</div>
@@ -365,6 +371,15 @@
             makeAPICall(`/users/${userId}`, "userResult");
         }
         
+        function searchUsers() {
+            const searchTerm = document.getElementById("searchUsername").value.trim();
+            if (!searchTerm) {
+                alert("Lütfen arama yapmak için bir kullanıcı adı girin!");
+                return;
+            }
+            makeAPICall(`/users/search?username=${encodeURIComponent(searchTerm)}`, "userResult");
+        }
+        
         // Enter tuşu desteği
         document.getElementById("productId").addEventListener("keypress", function(e) {
             if (e.key === "Enter") {
@@ -375,6 +390,12 @@
         document.getElementById("userId").addEventListener("keypress", function(e) {
             if (e.key === "Enter") {
                 fetchUser();
+            }
+        });
+        
+        document.getElementById("searchUsername").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                searchUsers();
             }
         });
     </script>
